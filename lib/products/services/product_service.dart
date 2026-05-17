@@ -12,7 +12,7 @@ class ProductService {
     final response = await _client.get(Uri.parse('${ApiConstants.baseUrl}${ApiConstants.productsEndpoint}'));
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to fetch products: ${response.statusCode}');
+      throw Exception('Failed to fetch products: ${response.statusCode} - ${response.body}');
     }
 
     final decoded = jsonDecode(response.body) as List<dynamic>;
@@ -25,7 +25,7 @@ class ProductService {
     final response = await _client.get(Uri.parse('${ApiConstants.baseUrl}${ApiConstants.productById(id)}'));
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to fetch product: ${response.statusCode}');
+      throw Exception('Failed to fetch product: ${response.statusCode} - ${response.body}');
     }
 
     final decoded = jsonDecode(response.body) as Map<String, dynamic>;
@@ -40,7 +40,7 @@ class ProductService {
     );
 
     if (response.statusCode != 200 && response.statusCode != 201) {
-      throw Exception('Failed to create product: ${response.statusCode}');
+      throw Exception('Failed to create product: ${response.statusCode} - ${response.body}');
     }
 
     final decoded = jsonDecode(response.body) as Map<String, dynamic>;
@@ -59,7 +59,7 @@ class ProductService {
     );
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to update product: ${response.statusCode}');
+      throw Exception('Failed to update product: ${response.statusCode} - ${response.body}');
     }
 
     final decoded = jsonDecode(response.body) as Map<String, dynamic>;
@@ -74,7 +74,7 @@ class ProductService {
     );
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to patch product: ${response.statusCode}');
+      throw Exception('Failed to patch product: ${response.statusCode} - ${response.body}');
     }
 
     final decoded = jsonDecode(response.body) as Map<String, dynamic>;
@@ -85,7 +85,7 @@ class ProductService {
     final response = await _client.delete(Uri.parse('${ApiConstants.baseUrl}${ApiConstants.productById(id)}'));
 
     if (response.statusCode != 200 && response.statusCode != 204) {
-      throw Exception('Failed to delete product: ${response.statusCode}');
+      throw Exception('Failed to delete product: ${response.statusCode} - ${response.body}');
     }
   }
 }

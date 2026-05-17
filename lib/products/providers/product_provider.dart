@@ -3,9 +3,9 @@ import 'package:flutter_http_provider/products/models/product.dart';
 import 'package:flutter_http_provider/products/services/product_service.dart';
 
 class ProductProvider extends ChangeNotifier {
+  final ProductService _service;
   ProductProvider({required ProductService service}) : _service = service;
 
-  final ProductService _service;
 
   final List<Product> _products = <Product>[];
   bool _isLoading = false;
