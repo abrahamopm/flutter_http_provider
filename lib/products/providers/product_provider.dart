@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_http_provider/features/data/models/product.dart';
-import 'package:flutter_http_provider/features/data/repositories/product_repository.dart';
+import 'package:flutter_http_provider/products/models/product.dart';
+import 'package:flutter_http_provider/products/services/product_service.dart';
 
 class ProductProvider extends ChangeNotifier {
-  ProductProvider({required ProductRepository repository}) : _repository = repository;
+  ProductProvider({required ProductService service}) : _service = service;
 
-  final ProductRepository _repository;
+  final ProductService _service;
 
   final List<Product> _products = <Product>[];
   bool _isLoading = false;
@@ -23,7 +23,7 @@ class ProductProvider extends ChangeNotifier {
     try {
       _products
         ..clear()
-        ..addAll(await _repository.getProducts());
+        ..addAll(await _service.getProducts());
     } catch (error) {
       _errorMessage = error.toString();
     } finally {

@@ -1,11 +1,10 @@
 import 'dart:convert';
-
-import 'package:flutter_http_provider/core/constants/api_constants.dart';
-import 'package:flutter_http_provider/features/data/models/product.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_http_provider/core/constants/api_constants.dart';
+import 'package:flutter_http_provider/products/models/product.dart';
 
-class ProductRemoteDatasource {
-  ProductRemoteDatasource({required http.Client client}) : _client = client;
+class ProductService {
+  ProductService({required http.Client client}) : _client = client;
 
   final http.Client _client;
 

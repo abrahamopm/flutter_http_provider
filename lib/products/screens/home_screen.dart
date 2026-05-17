@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_http_provider/features/presentation/providers/product_provider.dart';
+import 'package:flutter_http_provider/products/providers/product_provider.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -26,7 +26,7 @@ class HomeScreen extends StatelessWidget {
             child: ListView.separated(
               physics: const AlwaysScrollableScrollPhysics(),
               itemCount: provider.products.length,
-              separatorBuilder: (_, __) => const Divider(height: 1),
+              separatorBuilder: (_, _) => const Divider(height: 1),
               itemBuilder: (context, index) {
                 final product = provider.products[index];
                 return ListTile(

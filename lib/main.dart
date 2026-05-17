@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-import 'package:flutter_http_provider/core/network/http_provider.dart';
-import 'package:flutter_http_provider/features/data/datasources/product_remote_datasource.dart';
-import 'package:flutter_http_provider/features/data/repositories/product_repository.dart';
-import 'package:flutter_http_provider/features/presentation/providers/product_provider.dart';
-import 'package:flutter_http_provider/features/presentation/screens/home_screen.dart';
+import 'package:flutter_http_provider/products/services/product_service.dart';
+import 'package:flutter_http_provider/products/providers/product_provider.dart';
+import 'package:flutter_http_provider/products/screens/home_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,13 +14,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final httpProvider = HttpProvider();
-
     return ChangeNotifierProvider(
       create: (_) => ProductProvider(
-        repository: ProductRepository(
-          remoteDatasource: ProductRemoteDatasource(client: httpProvider.client),
-        ),
+        service: ProductService(client: http.Client()),
       )..loadProducts(),
       child: MaterialApp(
         title: 'Product Management App',
