@@ -123,14 +123,28 @@ Future<Product?> _showProductFormDialog(BuildContext context, {Product? existing
                   controller: descriptionController,
                   decoration: const InputDecoration(labelText: 'Description'),
                   maxLines: 2,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) return null; // optional
+                    if (value.trim().length < 3) return 'Description too short';
+                    return null;
+                  },
                 ),
                 TextFormField(
                   controller: categoryController,
                   decoration: const InputDecoration(labelText: 'Category'),
+                  validator: (value) => (value == null || value.trim().isEmpty) ? 'Category required' : null,
                 ),
                 TextFormField(
                   controller: imageController,
                   decoration: const InputDecoration(labelText: 'Image URL'),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) return null; // optional
+                    final uri = Uri.tryParse(value.trim());
+                    if (uri == null || !(uri.isAbsolute && (uri.scheme == 'http' || uri.scheme == 'https'))) {
+                      return 'Enter a valid http(s) URL';
+                    }
+                    return null;
+                  },
                 ),
               ],
             ),
@@ -178,6 +192,7 @@ Future<String?> _showTextInputDialog(
   String? initialValue,
 }) {
   final controller = TextEditingController(text: initialValue ?? '');
+  final formKey = GlobalKey<FormState>();
 
   return showDialog<String?>(
     context: context,
@@ -185,13 +200,28 @@ Future<String?> _showTextInputDialog(
     builder: (context) {
       return AlertDialog(
         title: Text(title),
-        content: TextField(
-          controller: controller,
-          decoration: InputDecoration(labelText: label),
+        content: Form(
+          key: formKey,
+          child: TextFormField(
+            controller: controller,
+            decoration: InputDecoration(labelText: label),
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) return 'Value required';
+              if (value.trim().length > 250) return 'Too long';
+              return null;
+            },
+          ),
         ),
         actions: [
           TextButton(onPressed: () => Navigator.of(context).pop(null), child: const Text('Cancel')),
-          ElevatedButton(onPressed: () => Navigator.of(context).pop(controller.text), child: const Text('OK')),
+          ElevatedButton(
+            onPressed: () {
+              if (formKey.currentState?.validate() ?? false) {
+                Navigator.of(context).pop(controller.text);
+              }
+            },
+            child: const Text('OK'),
+          ),
         ],
       );
     },
