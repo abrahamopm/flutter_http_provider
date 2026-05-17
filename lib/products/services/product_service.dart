@@ -66,6 +66,21 @@ class ProductService {
     return Product.fromJson(decoded);
   }
 
+  Future<Product> patchProduct(int id, Map<String, dynamic> data) async {
+    final response = await _client.patch(
+      Uri.parse('${ApiConstants.baseUrl}${ApiConstants.productById(id)}'),
+      headers: const {'Content-Type': 'application/json'},
+      body: jsonEncode(data),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to patch product: ${response.statusCode}');
+    }
+
+    final decoded = jsonDecode(response.body) as Map<String, dynamic>;
+    return Product.fromJson(decoded);
+  }
+
   Future<void> deleteProduct(int id) async {
     final response = await _client.delete(Uri.parse('${ApiConstants.baseUrl}${ApiConstants.productById(id)}'));
 
