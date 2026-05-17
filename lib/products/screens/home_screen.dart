@@ -21,17 +21,13 @@ class HomeScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          const mockProduct = Product(
-            title: 'New Product',
-            price: 29.99,
-            description: 'A newly added mock product',
-            category: 'electronics',
-            image: 'https://i.pravatar.cc/150?u=mock',
-          );
-          await context.read<ProductProvider>().createProduct(mockProduct);
-          if (context.mounted) {
-            final error = context.read<ProductProvider>().errorMessage;
-            _showFeedback(context, error ?? 'Mock Product created!');
+          final product = await _showProductFormDialog(context);
+          if (product != null) {
+            await context.read<ProductProvider>().createProduct(product);
+            if (context.mounted) {
+              final error = context.read<ProductProvider>().errorMessage;
+              _showFeedback(context, error ?? 'Product created!');
+            }
           }
         },
         tooltip: 'Add Product',
@@ -83,6 +79,122 @@ void _showFeedback(BuildContext context, String message, {bool isError = false})
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       margin: const EdgeInsets.all(12),
     ),
+  );
+}
+
+Future<Product?> _showProductFormDialog(BuildContext context, {Product? existing}) {
+  final titleController = TextEditingController(text: existing?.title ?? '');
+  final priceController = TextEditingController(text: existing != null ? existing.price.toString() : '');
+  final descriptionController = TextEditingController(text: existing?.description ?? '');
+  final categoryController = TextEditingController(text: existing?.category ?? '');
+  final imageController = TextEditingController(text: existing?.image ?? '');
+
+  final formKey = GlobalKey<FormState>();
+
+  return showDialog<Product?>(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) {
+      return AlertDialog(
+        title: Text(existing == null ? 'Create Product' : 'Update Product'),
+        content: SingleChildScrollView(
+          child: Form(
+            key: formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: titleController,
+                  decoration: const InputDecoration(labelText: 'Title'),
+                  validator: (value) => (value == null || value.trim().isEmpty) ? 'Title required' : null,
+                ),
+                TextFormField(
+                  controller: priceController,
+                  decoration: const InputDecoration(labelText: 'Price'),
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) return 'Price required';
+                    final parsed = double.tryParse(value);
+                    if (parsed == null) return 'Enter a valid number';
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: descriptionController,
+                  decoration: const InputDecoration(labelText: 'Description'),
+                  maxLines: 2,
+                ),
+                TextFormField(
+                  controller: categoryController,
+                  decoration: const InputDecoration(labelText: 'Category'),
+                ),
+                TextFormField(
+                  controller: imageController,
+                  decoration: const InputDecoration(labelText: 'Image URL'),
+                ),
+              ],
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(null),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (formKey.currentState?.validate() ?? false) {
+                final title = titleController.text.trim();
+                final price = double.parse(priceController.text.trim());
+                final description = descriptionController.text.trim();
+                final category = categoryController.text.trim();
+                final image = imageController.text.trim();
+
+                final result = Product(
+                  id: existing?.id,
+                  title: title,
+                  price: price,
+                  description: description,
+                  category: category,
+                  image: image.isNotEmpty ? image : (existing?.image ?? ''),
+                  rating: existing?.rating,
+                );
+
+                Navigator.of(context).pop(result);
+              }
+            },
+            child: Text(existing == null ? 'Create' : 'Update'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future<String?> _showTextInputDialog(
+  BuildContext context, {
+  required String title,
+  required String label,
+  String? initialValue,
+}) {
+  final controller = TextEditingController(text: initialValue ?? '');
+
+  return showDialog<String?>(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) {
+      return AlertDialog(
+        title: Text(title),
+        content: TextField(
+          controller: controller,
+          decoration: InputDecoration(labelText: label),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(context).pop(null), child: const Text('Cancel')),
+          ElevatedButton(onPressed: () => Navigator.of(context).pop(controller.text), child: const Text('OK')),
+        ],
+      );
+    },
   );
 }
 
@@ -148,18 +260,13 @@ class ProductTile extends StatelessWidget {
                 icon: const Icon(Icons.edit_outlined),
                 tooltip: 'Update (PUT)',
                 onPressed: () async {
-                  final updatedProduct = Product(
-                    id: product.id,
-                    title: '${product.title} (Updated)',
-                    price: product.price,
-                    description: product.description,
-                    category: product.category,
-                    image: product.image,
-                  );
-                  await context.read<ProductProvider>().updateProduct(updatedProduct);
-                  if (context.mounted) {
-                    final error = context.read<ProductProvider>().errorMessage;
-                    _showFeedback(context, error ?? 'Product updated successfully!');
+                  final updated = await _showProductFormDialog(context, existing: product);
+                  if (updated != null) {
+                    await context.read<ProductProvider>().updateProduct(updated);
+                    if (context.mounted) {
+                      final error = context.read<ProductProvider>().errorMessage;
+                      _showFeedback(context, error ?? 'Product updated successfully!');
+                    }
                   }
                 },
               ),
@@ -167,13 +274,21 @@ class ProductTile extends StatelessWidget {
                 icon: const Icon(Icons.auto_fix_high_outlined),
                 tooltip: 'Patch',
                 onPressed: () async {
-                  await context.read<ProductProvider>().patchProduct(
-                    product.id!,
-                    {'title': '${product.title} (Patched)'},
+                  final newTitle = await _showTextInputDialog(
+                    context,
+                    title: 'Patch Title',
+                    label: 'Title',
+                    initialValue: product.title,
                   );
-                  if (context.mounted) {
-                    final error = context.read<ProductProvider>().errorMessage;
-                    _showFeedback(context, error ?? 'Product title patched!');
+                  if (newTitle != null && newTitle.trim().isNotEmpty) {
+                    await context.read<ProductProvider>().patchProduct(
+                      product.id!,
+                      {'title': newTitle.trim()},
+                    );
+                    if (context.mounted) {
+                      final error = context.read<ProductProvider>().errorMessage;
+                      _showFeedback(context, error ?? 'Product title patched!');
+                    }
                   }
                 },
               ),
