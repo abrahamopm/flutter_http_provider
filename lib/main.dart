@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_http_provider/core/network/http_provider.dart';
-import 'package:flutter_http_provider/features/data/datasources/user_remote_datasource.dart';
-import 'package:flutter_http_provider/features/data/repositories/user_repository.dart';
-import 'package:flutter_http_provider/features/presentation/providers/user_provider.dart';
+import 'package:flutter_http_provider/features/data/datasources/product_remote_datasource.dart';
+import 'package:flutter_http_provider/features/data/repositories/product_repository.dart';
+import 'package:flutter_http_provider/features/presentation/providers/product_provider.dart';
 import 'package:flutter_http_provider/features/presentation/screens/home_screen.dart';
 
 void main() {
@@ -18,13 +18,13 @@ class MyApp extends StatelessWidget {
     final httpProvider = HttpProvider();
 
     return ChangeNotifierProvider(
-      create: (_) => UserProvider(
-        repository: UserRepository(
-          remoteDatasource: UserRemoteDatasource(client: httpProvider.client),
+      create: (_) => ProductProvider(
+        repository: ProductRepository(
+          remoteDatasource: ProductRemoteDatasource(client: httpProvider.client),
         ),
-      )..loadUsers(),
+      )..loadProducts(),
       child: MaterialApp(
-        title: 'User Management App',
+        title: 'Product Management App',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

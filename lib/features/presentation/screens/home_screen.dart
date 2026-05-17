@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_http_provider/features/presentation/providers/user_provider.dart';
+import 'package:flutter_http_provider/features/presentation/providers/product_provider.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -9,9 +9,9 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Users'),
+        title: const Text('Products'),
       ),
-      body: Consumer<UserProvider>(
+      body: Consumer<ProductProvider>(
         builder: (context, provider, _) {
           if (provider.isLoading) {
             return const Center(child: CircularProgressIndicator());
@@ -22,19 +22,19 @@ class HomeScreen extends StatelessWidget {
           }
 
           return RefreshIndicator(
-            onRefresh: () => context.read<UserProvider>().loadUsers(),
+            onRefresh: () => context.read<ProductProvider>().loadProducts(),
             child: ListView.separated(
               physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: provider.users.length,
+              itemCount: provider.products.length,
               separatorBuilder: (_, __) => const Divider(height: 1),
               itemBuilder: (context, index) {
-                final user = provider.users[index];
+                final product = provider.products[index];
                 return ListTile(
                   leading: CircleAvatar(
-                    backgroundImage: NetworkImage(user.avatar),
+                    backgroundImage: NetworkImage(product.image),
                   ),
-                  title: Text(user.fullName),
-                  subtitle: Text(user.email),
+                  title: Text(product.title),
+                  subtitle: Text(product.category),
                 );
               },
             ),
