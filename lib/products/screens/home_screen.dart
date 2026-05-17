@@ -58,7 +58,7 @@ class HomeScreen extends StatelessWidget {
                 Container(
                   color: Colors.black12,
                   child: const Center(
-                    child: CircularProgressIndicator(),
+                    child: _PulsingProgressIndicator(),
                   ),
                 ),
             ],
