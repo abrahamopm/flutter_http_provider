@@ -1,6 +1,8 @@
-# User Management App - Provider + HTTP
+# Product Management App - Provider + HTTP
 
-A Flutter application that performs full CRUD (Create, Read, Update, Delete) operations on user data using the **ReqRes API**. Built with **Provider** state management and **http** package for networking.
+A Flutter application that performs full CRUD (Create, Read, Update, Delete) operations on product data using the **FakeStore API**. Built with **Provider** state management and the **http** package for networking.
+
+Note: This project and the companion Bloc/Dio project both use the same public API (https://fakestoreapi.com) — they differ only in UI and state-management/network libraries.
 
 
 ## Tech Stack
@@ -8,15 +10,17 @@ A Flutter application that performs full CRUD (Create, Read, Update, Delete) ope
 - **Flutter** - UI Framework
 - **Provider** (^6.1.0) - State Management
 - **http** (^1.1.0) - Network Requests
-- **ReqRes API** - Public REST API for user management
+- **FakeStore API** - Public REST API for e-commerce products
 
 ## API Information
 
-**Base URL:** `https://reqres.in/api`
+**Base URL:** `https://fakestoreapi.com`
 
 **Endpoints:**
-- `GET /users` - List all users (pagination supported)
-- `GET /users/{id}` - Get single user details
-- `POST /users` - Create a new user
-- `PUT /users/{id}` - Update a user
-- `DELETE /users/{id}` - Delete a user
+- `GET /products` - List all products
+- `GET /products/{id}` - Get single product details
+- `POST /products` - Create a new product
+- `PUT /products/{id}` - Update a product
+- `DELETE /products/{id}` - Delete a product
+- `GET /products/categories` - Get all categories
+- `GET /products/category/{category}` - Get products by category
