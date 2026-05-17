@@ -20,7 +20,7 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
           const mockProduct = Product(
             title: 'New Product',
             price: 29.99,
@@ -28,10 +28,11 @@ class HomeScreen extends StatelessWidget {
             category: 'electronics',
             image: 'https://i.pravatar.cc/150?u=mock',
           );
-          context.read<ProductProvider>().createProduct(mockProduct);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Creating Mock Product...')),
-          );
+          await context.read<ProductProvider>().createProduct(mockProduct);
+          if (context.mounted) {
+            final error = context.read<ProductProvider>().errorMessage;
+            _showFeedback(context, error ?? 'Mock Product created!');
+          }
         },
         tooltip: 'Add Product',
         child: const Icon(Icons.add),
@@ -72,23 +73,23 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
+void _showFeedback(BuildContext context, String message, {bool isError = false}) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(message),
+      backgroundColor: isError ? Colors.redAccent : Colors.indigo,
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      margin: const EdgeInsets.all(12),
+    ),
+  );
+}
+
 class ProductTile extends StatelessWidget {
   const ProductTile({super.key, required this.product});
 
   final Product product;
-
-  void _showFeedback(BuildContext context, String message, {bool isError = false}) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: isError ? Colors.redAccent : Colors.indigo,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        margin: const EdgeInsets.all(12),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
