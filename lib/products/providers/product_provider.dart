@@ -33,22 +33,72 @@ class ProductProvider extends ChangeNotifier {
   }
 
   Future<void> createProduct(Product product) async {
-    
-    print('Create product: ${product.title}');
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      final newProduct = await _service.createProduct(product);
+      _products.insert(0, newProduct);
+    } catch (error) {
+      _errorMessage = error.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> updateProduct(Product product) async {
-    
-    print('Update product: ${product.id}');
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      final updatedProduct = await _service.updateProduct(product);
+      final index = _products.indexWhere((p) => p.id == product.id);
+      if (index != -1) {
+        _products[index] = updatedProduct;
+      }
+    } catch (error) {
+      _errorMessage = error.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> patchProduct(int id, Map<String, dynamic> data) async {
-    
-    print('Patch product: $id');
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      final patchedProduct = await _service.patchProduct(id, data);
+      final index = _products.indexWhere((p) => p.id == id);
+      if (index != -1) {
+        _products[index] = patchedProduct;
+      }
+    } catch (error) {
+      _errorMessage = error.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> deleteProduct(int id) async {
-    // Stub for UI development
-    print('Delete product: $id');
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      await _service.deleteProduct(id);
+      _products.removeWhere((p) => p.id == id);
+    } catch (error) {
+      _errorMessage = error.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 }
