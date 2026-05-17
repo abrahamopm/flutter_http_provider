@@ -31,4 +31,24 @@ class ProductProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> createProduct(Product product) async {
+    
+    print('Create product: ${product.title}');
+  }
+
+  Future<void> updateProduct(Product product) async {
+    
+    print('Update product: ${product.id}');
+  }
+
+  Future<void> patchProduct(int id, Map<String, dynamic> data) async {
+    
+    print('Patch product: $id');
+  }
+
+  Future<void> deleteProduct(int id) async {
+    // Stub for UI development
+    print('Delete product: $id');
+  }
 }
