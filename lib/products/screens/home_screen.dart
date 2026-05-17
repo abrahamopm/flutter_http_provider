@@ -38,7 +38,7 @@ class HomeScreen extends StatelessWidget {
           return Stack(
             children: [
               if (provider.isLoading && provider.products.isEmpty)
-                const Center(child: CircularProgressIndicator())
+                const Center(child: _PulsingProgressIndicator())
               else if (provider.errorMessage != null && provider.products.isEmpty)
                 Center(child: Text(provider.errorMessage!))
               else
@@ -361,6 +361,43 @@ class ProductTile extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _PulsingProgressIndicator extends StatefulWidget {
+  const _PulsingProgressIndicator();
+
+  @override
+  State<_PulsingProgressIndicator> createState() => _PulsingProgressIndicatorState();
+}
+
+class _PulsingProgressIndicatorState extends State<_PulsingProgressIndicator>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    )..repeat(reverse: true);
+    _animation = Tween<double>(begin: 0.3, end: 1.0).animate(_controller);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _animation,
+      child: const CircularProgressIndicator(),
     );
   }
 }
