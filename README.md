@@ -1,5 +1,9 @@
 # Product Management App - Provider + HTTP
 
+| Name | ID | Section |
+| :--- | :--- | :--- |
+| Abraham Nigatu Kebede | UGR/7532/16 | 2 |
+
 A Flutter application that performs full CRUD (Create, Read, Update, Delete) operations on product data using the **FakeStore API**. Built with **Provider** state management and the **http** package for networking.
 
 Note: This project and the companion Bloc/Dio project both use the same public API (https://fakestoreapi.com) — they differ only in UI and state-management/network libraries.
