@@ -22,19 +22,58 @@ class MyApp extends StatelessWidget {
         title: 'Product Management App',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+          brightness: Brightness.light,
           colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.pinkAccent,
+            seedColor: const Color(0xFFC18C7E),
             brightness: Brightness.light,
+            primary: const Color(0xFFC18C7E),
+            secondary: const Color(0xFFD4A373),
+            surface: Colors.white,
           ),
           useMaterial3: true,
-          appBarTheme: const AppBarTheme(
-            centerTitle: true,
-            elevation: 2,
-          ),
+          scaffoldBackgroundColor: const Color(0xFFFAF8F5),
           cardTheme: CardThemeData(
-            elevation: 2,
+            color: Colors.white,
+            elevation: 1.5,
+            shadowColor: const Color(0xFF2E2A27).withValues(alpha: 0.08),
             shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+          ),
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            centerTitle: true,
+            titleTextStyle: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 2.0,
+              color: Color(0xFF2E2A27),
+            ),
+            iconTheme: IconThemeData(color: Color(0xFF2E2A27)),
+          ),
+          dialogTheme: DialogThemeData(
+            backgroundColor: const Color(0xFFFAF8F5),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24),
+            ),
+          ),
+          inputDecorationTheme: InputDecorationTheme(
+            filled: true,
+            fillColor: Colors.white,
+            floatingLabelStyle: const TextStyle(color: Color(0xFFC18C7E)),
+            labelStyle: const TextStyle(color: Colors.grey),
+            border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Color(0xFFE8E3DD)),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Color(0xFFE8E3DD)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Color(0xFFC18C7E), width: 1.5),
             ),
           ),
         ),
