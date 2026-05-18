@@ -4,17 +4,8 @@
 | :--- | :--- | :--- |
 | Abraham Nigatu Kebede | UGR/7532/16 | 2 |
 
-A Flutter application that performs full CRUD (Create, Read, Update, Delete) operations on product data using the **FakeStore API**. Built with **Provider** state management and the **http** package for networking.
+A Flutter application that performs full CRUD operations on product data using the **FakeStore API**. Built with **Provider** state management and the **http** package for networking.
 
-Note: This project and the companion Bloc/Dio project both use the same public API (https://fakestoreapi.com) — they differ only in UI and state-management/network libraries.
-
-
-## Tech Stack
-
-- **Flutter** - UI Framework
-- **Provider** (^6.1.0) - State Management
-- **http** (^1.1.0) - Network Requests
-- **FakeStore API** - Public REST API for e-commerce products
 
 ## API Information
 
