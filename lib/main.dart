@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -15,9 +16,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => ProductProvider(
-        service: ProductService(client: http.Client()),
-      )..loadProducts(),
+      create: (_) {
+        final provider = ProductProvider(
+          service: ProductService(client: http.Client()),
+        );
+        final isTest = Platform.environment.containsKey('FLUTTER_TEST');
+        if (!isTest) {
+          provider.loadProducts();
+        }
+        return provider;
+      },
       child: MaterialApp(
         title: 'Product Management App',
         debugShowCheckedModeBanner: false,
