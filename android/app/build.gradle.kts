@@ -42,3 +42,7 @@ android {
 flutter {
     source = "../.."
 }
+
+tasks.matching { it.name == "stripDebugDebugSymbols" }.configureEach {
+    enabled = false
+}
