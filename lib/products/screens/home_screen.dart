@@ -15,7 +15,7 @@ class HomeScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             const Text(
-              'PEOPLEHUB',
+              'Fakestore',
               style: TextStyle(
                 fontWeight: FontWeight.w900,
                 letterSpacing: 2.0,
